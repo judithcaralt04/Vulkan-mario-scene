@@ -1,110 +1,63 @@
 # Vulkan Final Project
 
-## Descripcion
+## Description
 
-Escena 3D estilo Mario hecha con Vulkan.
-La escena representa un pequeño nivel: Mario salta debajo de un bloque flotante,
-la estrella sale del bloque, hay una tuberia a un lado y Lakitu sale flotando desde esa zona.
-Tambien hay una esfera skybox de cielo estilo Mario centrada en la camara.
-El proyecto carga modelos OBJ, aplica matrices MVP independientes por objeto,
-usa texturas, iluminacion Phong y una camara FPS con perspectiva.
+A 3D scene in a Mario style, built with Vulkan. The scene represents a small level: Mario jumps under a floating block, a star comes out of the block, there is a warp pipe to one side, and Lakitu floats up from that area. There is also a sky sphere in a Mario style sky, centered on the camera. The project loads OBJ models, applies independent MVP matrices per object, uses textures, Phong lighting, and an FPS camera with perspective projection.
 
-## Requisitos de la rubrica cubiertos
+## Rubric requirements covered
 
-- **Carga de modelos 3D / animacion:** mas de 5 instancias de objetos en escena:
-  - suelo de ladrillo
-  - esfera de cielo
-  - Mario
-  - Goomba
-  - tuberia
-  - bloque
-  - estrella
-  - Lakitu
-  - particulas de brillo alrededor de la estrella
-- **Tipos distintos de OBJ:** mas de 3 formas OBJ distintas:
-  - `plane.obj`
-  - `mario.obj`
-  - `goomba.obj`
-  - `warp_pipe.obj`
-  - `marioblock.obj`
-  - `star.obj`
-  - `lakitu.obj`
-- **Texturas:** mas de 5 texturas distintas:
-  - `bricks.bmp`
-  - `mariosky.bmp`
-  - `mario.bmp`
-  - `goomba.png`
-  - `warp_pipe.png`
-  - `marioblock.png`
-  - `rainbowStarMario.bmp`
-  - `lakitu.bmp`
-- **Matrices de modelo:** cada objeto tiene su propia matriz `model`, con posicion, rotacion y escala.
-- **Animacion:** varios objetos cambian su matriz de modelo cada frame:
-  - Mario salta verticalmente debajo del bloque
-  - Goomba se mueve de lado a lado
-  - el bloque flotante se mantiene estatico
-  - la estrella sale hacia arriba desde el bloque
-  - Lakitu sube/flota desde la zona de la tuberia
-  - varias particulas se mueven alrededor de la estrella
-- **Camara:** camara FPS con teclado, raton y proyeccion en perspectiva.
-- **Iluminacion:** modelo Phong en el fragment shader.
-- **Funcion avanzada:** sky sphere y animacion de particulas. La esfera de cielo sigue la posicion de la camara, y las particulas son pequenas estrellas animadas alrededor de la estrella principal.
-- **Estructuras y calidad:** se usa la estructura `SceneObject`, vectores para los objetos y funciones separadas para cargar recursos, actualizar matrices, actualizar luces, dibujar y limpiar memoria.
+- **3D model loading / animation:** more than 5 object instances in the scene: brick ground, sky sphere, Mario, Goomba, warp pipe, block, star, Lakitu, and sparkle particles around the star
+- **Different OBJ types:** more than 3 different OBJ shapes: `plane.obj`, `mario.obj`, `goomba.obj`, `warp_pipe.obj`, `marioblock.obj`, `star.obj`, `lakitu.obj`
+- **Textures:** more than 5 different textures: `bricks.bmp`, `mariosky.bmp`, `mario.bmp`, `goomba.png`, `warp_pipe.png`, `marioblock.png`, `rainbowStarMario.bmp`, `lakitu.bmp`
+- **Model matrices:** every object has its own `model` matrix, with position, rotation and scale
+- **Animation:** several objects update their model matrix every frame: Mario jumps vertically under the block, Goomba moves side to side, the floating block stays static, the star rises out of the block, Lakitu rises and floats from the pipe area, and several particles move around the star
+- **Camera:** FPS camera with keyboard and mouse input, and perspective projection
+- **Lighting:** Phong lighting model in the fragment shader
+- **Advanced feature:** sky sphere and particle animation. The sky sphere follows the camera position, and the particles are small animated stars around the main star
+- **Structure and quality:** uses a `SceneObject` structure, vectors for the objects, and separate functions for loading resources, updating matrices, updating lights, drawing and cleaning up memory
 
-## Funcion avanzada
+## Advanced feature
 
-Las funciones avanzadas elegidas son **sky sphere** y **animacion de particulas**.
-La sky sphere usa `sphere.obj` con la textura `mariosky.bmp`.
-Cada frame se coloca en la posicion de la camara para que el jugador siempre este dentro del cielo.
-Se desactiva el culling de caras para poder ver la esfera desde dentro.
+The advanced features chosen are the **sky sphere** and **particle animation**. The sky sphere uses `sphere.obj` with the `mariosky.bmp` texture. Each frame it is repositioned to the camera's position so the player is always inside the sky, and face culling is disabled so the sphere is visible from the inside.
 
-La escena tiene varias particulas de brillo alrededor de la estrella principal.
-Cada particula usa el modelo `star.obj` con una escala muy pequena y una matriz de modelo propia.
+The scene has several sparkle particles around the main star. Each particle uses the `star.obj` model at a very small scale, with its own model matrix. The particles are animated every frame using `sin` and `cos` functions: they drift smoothly on X and Y, move up and down on Z, and rotate around their center.
 
-Las particulas se animan cada frame con funciones `sin` y `cos`:
+## Controls
 
-- se desplazan suavemente en X e Y
-- suben y bajan en Z
-- giran alrededor de su centro
+- `W`: move forward
+- `S`: move backward
+- `A`: move left
+- `D`: move right
+- `Q`: move down
+- `E`: move up
+- Mouse: look around
+- `Esc`: quit
 
-Esta opcion esta en la lista de funciones avanzadas del enunciado y mantiene el codigo sencillo.
+## How to build
 
-## Controles
+Before building, unzip `glm.zip` and `include.zip` so that `glm/` and `include/` sit directly inside the project root, next to `main.cpp`.
 
-- `W`: avanzar
-- `S`: retroceder
-- `A`: moverse a la izquierda
-- `D`: moverse a la derecha
-- `Q`: bajar
-- `E`: subir
-- Raton: orientar la camara
-- `Esc`: cerrar la aplicacion
+1. Open `VulkanTest.sln` in Visual Studio 2022
+2. Select the `Debug` configuration and `x64` platform
+3. Build the `VulkanTest` project
+4. Run from Visual Studio
 
-## Como compilar
+The shaders are already compiled as `vert.spv` and `frag.spv`. If you modify `shader.vert` or `shader.frag`, you will need the Vulkan SDK installed to recompile them, then run `compile_shaders.bat` from the project folder.
 
-1. Abrir `VulkanTest.sln` con Visual Studio 2022.
-2. Seleccionar configuracion `Debug` y plataforma `x64`.
-3. Compilar el proyecto `VulkanTest`.
-4. Ejecutar desde Visual Studio.
+## Main files
 
-Los shaders ya estan compilados como `vert.spv` y `frag.spv`. Si se modifican
-`shader.vert` o `shader.frag`, ejecutar `VulkanTest/VulkanTest/compile_shaders.bat`
-desde la carpeta `VulkanTest/VulkanTest`.
+- `main.cpp`: the Mario scene, camera, animation, descriptors and render loop
+- `vulkan_setup.cpp`: Vulkan initialization, swapchain, pipeline and depth buffer
+- `model.cpp`: loading OBJ models with tinyobjloader
+- `texture.cpp`: loading textures with stb_image
+- `shader.vert`: MVP transformation and normals
+- `shader.frag`: texture and Phong lighting
 
-## Archivos principales
+## References and sources
 
-- `VulkanTest/VulkanTest/main.cpp`: escena de Mario, camara, animacion, descriptores y render loop.
-- `VulkanTest/VulkanTest/vulkan_setup.cpp`: inicializacion de Vulkan, swapchain, pipeline y depth buffer.
-- `VulkanTest/VulkanTest/model.cpp`: carga de modelos OBJ con tinyobjloader.
-- `VulkanTest/VulkanTest/texture.cpp`: carga de texturas con stb_image.
-- `VulkanTest/VulkanTest/shader.vert`: transformacion MVP y normales.
-- `VulkanTest/VulkanTest/shader.frag`: textura + iluminacion Phong.
-
-## Referencias y fuentes
-
-- Plantilla Vulkan proporcionada en eStudy.
-- Apuntes de la asignatura: Camera, Load OBJ, Texture and Light.
-- Modelos y texturas de Mario proporcionados en los ZIPs de la practica.
-- tinyobjloader para cargar OBJ.
-- stb_image para cargar imagenes.
+- Vulkan template provided on eStudy
+- Course notes: Camera, Load OBJ, Texture and Light
+- Mario models and textures provided in the practice ZIPs
+- tinyobjloader for loading OBJ files
+- stb_image for loading images
 - LearnOpenGL Camera: https://learnopengl.com/Getting-started/Camera
